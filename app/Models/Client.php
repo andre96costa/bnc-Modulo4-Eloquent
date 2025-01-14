@@ -17,7 +17,7 @@ class Client extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'document', 'birthdate'];
+    protected $fillable = ['uuid', 'user_id', 'document', 'birthdate'];
 
     /**
      * The attributes that should be cast to native types.
