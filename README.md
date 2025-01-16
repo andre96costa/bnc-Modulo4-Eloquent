@@ -1,66 +1,52 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## Módulo 4 - Trabalhando com Bando de dados.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+- **Data Definition Language (DDL):** create, alter, drop. Alteração da estrutura do banco.
+- **Data Manipulating Language (DML)**: Select, Insert, Delete, Update. Manipulação de dados.
+- **Data Transactional Language (DTL):** Begin, Commit, Rollback. Transações.
+- **Data Control Language (DCL):** Grant, Revoke, Deny. Gerenciamento do banco de dados.
 
-## About Laravel
+### Seeder
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+É um recurso do laravel para gerar dados “fake” para a aplicação. Criamos uma classe semeadora com o comando *“artisan make:seed nameSeeder ”*.  Na classe “DatabaseSeeder”, invocamos a classe seeder dentro do método *“call”* usando o comando *“artisan db:seed”.* Podemos gerar varios tipos de informação “fake” para os nossos models.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Comando para rodar um seeder específico  *sail art db:seed --class=PlanSeeder*
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Factory
 
-## Learning Laravel
+É um recurso do laravel para criar dados em grande quantidade, as factories permitem a utilização da biblioteca “*facker*”, é necessario que o model use a trait *“HasFactory”*. Esse recurso é combinado com os *“Seeder”* para que seja criado os dados através da linha de comando. 
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Podemos combinar factories quando um campo de um model é dependente de outro model. Por exemplo com relacionamentos.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Attributes
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+É uma funcionalidade do laravel que permite realizar transformações de dados durante a transição do dado entre o banco e a aplicação. Para isso criamos um método no módel com o *nome de um dos atributos da model* ou *podemos criar um atributo novo*, *esse metodo deve ter o retorno tipado com a classe \Illuminate\Database\Eloquent\Casts\Attribute, nesse casso também é necessario utilizar o $this->attributes['name'].*
 
-## Laravel Sponsors
+### UUIDS
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Quando usamos o atributo *uuid* como identificador principal do model podemos adicionar a *Trait HasUuids* dessa forma o laravel ira gerar o uuid automaticamente quando um model for criado. Porém se o uudi não for identificador principal do model, podemos utilizar o método *uniqueIds() da Trait HasUuids* dessa forma informando qual campo deve receber a geração do uuid. Na geração de uma migration podemos adicionar um campo uuid e utilizar a função *primary()* para indicar que este campo será o identificador princiapal da classe.
 
-### Premium Partners
+### Comando de consulta do Eloquent
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- **Consulta**
+    - **all()** - Trás todos os registros da tabela, *retornando uma collection*.
+    - **first()** - Finaliza um consulta no eloquent, buscando o primeiro dado.
+    - **limit()** - Limita a quantidade de dados da consulta. Retorna um *Builder.*
+    - **get()** - É utilizado para finalizar consultar no eloquent.
+    - **select()** - Utilizado para filtrar os dados do registro. Retorna um *Builder.*
+    - **count()** - Conta quantos registros existem.
+    - **find()** - Busca um registro pelo id.
+    - **findOrFail()** - Busca um registro pelo id, se não encontrar lança uma exceção.
+    - **findOr()** -  Busca um registro pelo id, se não encontrar lança uma exceção. Permite personalizar a exceção.
+    - **toSql()** - Retorna a consulta sql.
+- **Filtros**
+    - **where()** - Utilizado para filtrar informações, é possível passar variações de consulta no parâmetro. Varios where são um & logico do sql.
+    - **orWhere()** - Ou logico do sql.
+    - Podemos passar uma função dentro dos where, quando queremos agrupas um restrição da consulta, como se estivessemos colocando () em um trecho do sql.
+- **Relacionamentos**
+    - **with()** - Permite trazer na consulta a model com os seus relacionamentos. Passando um array com o nome da função que realizar o relacionamento. Também é possível passar uma closure para trazar dados especificos do relacionamento.
+    - with([’client’])
+    - with([’client’ → functions($query){ $query→select(’user_id’, ’documento’) }])
+    - with([’client:user_id,document as cpf, birthdate’])
+    - **LazyLoad** - Buscamos primeiro o model principal e depois chamamos o relacionamento.
+- **QueryBuilder**
+    - Recurso do laravel que permite escrever queries mais próximas do SQL através da facade DB::. O resultado será uma collection, porém ao usar query builder, não é possível acessar as features das models.
